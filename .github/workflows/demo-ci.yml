@@ -1,0 +1,30 @@
+name: Demo CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  docs-check:
+    name: Check repository guide
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Show repository context
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Event: $GITHUB_EVENT_NAME"
+          echo "Branch or ref: $GITHUB_REF"
+          git status --short
+
+      - name: Verify GitHub Actions guide exists
+        run: test -f docs/github-actions-guide.md
+
+      - name: Verify guide content
+        run: grep -q "workflow_dispatch" docs/github-actions-guide.md
